@@ -4,16 +4,11 @@
 - hosts: all
   become: true
   tasks:
-
-  - name: update resposiroty index 
-    apt : 
-      update_cache: yes
-    when: ansible_distribution in [ "Ubuntu" , "Debian" ]
-
   - name: install apache2  and php module packages
-    apt : 
+    package : 
       name: 
-        - apache2
-        - libapache2-mod-php
+        - "{{apache_package }}"
+        - "{{ php_package }}"
       state: latest
-    when: ansible_distribution in [ "Ubuntu" , "Debian" ]
+      update_cache: yes
+    when: ansible_distribution in [ "Ubuntu" , "Debian" , "CentOS"]
