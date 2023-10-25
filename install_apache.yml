@@ -8,13 +8,12 @@
   - name: update resposiroty index 
     apt : 
       update_cache: yes
+    when: ansible_distribution in [ "Ubuntu" , "Debian" ]
 
-  - name: install apache2 package
+  - name: install apache2  and php module packages
     apt : 
-      name: apache2
+      name: 
+        - apache2
+        - libapache2-mod-php
       state: latest
-
-  - name: add  apache2 php support package
-    apt : 
-      name: libapache2-mod-php
-      state: latest
+    when: ansible_distribution in [ "Ubuntu" , "Debian" ]
