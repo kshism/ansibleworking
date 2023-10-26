@@ -1,0 +1,44 @@
+---
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+  - name: install apache2  and php module packages
+    package : 
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in [ "Ubuntu" , "Debian" , "CentOS"]
+  - name: copy default_site.html file to the webserver
+    tags: apache,apache2,web
+    copy: 
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+- hosts: db_servers
+  become: true
+  tasks:
+  - name: install mariadb
+    package : 
+      name: 
+        - mariadb-server
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in [ "Ubuntu" , "Debian" , "CentOS"]
+
+- hosts: file_servers
+  become: true
+  tasks:
+  - name: install samba
+    package : 
+      name: 
+        - samba
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in [ "Ubuntu" , "Debian" , "CentOS"]
