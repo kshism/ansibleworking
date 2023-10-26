@@ -21,6 +21,13 @@
       group: root
       mode: 0644
 
+  - name: start apache servers
+    tags: apache,apache2,web
+    service: 
+      name: apache2
+      state: started
+      enabled: yes
+
 - hosts: db_servers
   become: true
   tasks:
@@ -39,6 +46,15 @@
     package : 
       name: 
         - samba
+        - unzip
       state: latest
       update_cache: yes
+  - name: install terraform
+    unarchive: 
+      src: https://releases.hashicorp.com/terraform/1.6.2/terraform_1.6.2_linux_386.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
     when: ansible_distribution in [ "Ubuntu" , "Debian" , "CentOS"]
